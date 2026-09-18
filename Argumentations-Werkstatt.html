@@ -1,0 +1,1328 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Argumentations-Werkstatt</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;800&family=Karla:ital,wght@0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#EEF1F7;
+    --paper:#FFFFFF;
+    --paper-2:#F6F8FC;
+    --ink:#182233;
+    --ink-soft:#57647A;
+    --ink-faint:#8A94A8;
+    --blue:#1F4E8C;
+    --blue-deep:#0F2C54;
+    --blue-tint:#E4ECF9;
+    --amber:#D98F1E;
+    --amber-tint:#FBEDD2;
+    --green:#2A8457;
+    --green-bg:#E1F3E9;
+    --green-line:#9FD3B7;
+    --red:#C0473D;
+    --red-bg:#FBE6E3;
+    --red-line:#E8B0A9;
+    --line:#D6DEEA;
+    --line-strong:#B7C3D6;
+    --shadow: 0 1px 2px rgba(15,44,84,.06), 0 8px 24px rgba(15,44,84,.06);
+    --radius: 14px;
+    /* Hero stays a fixed dark blueprint gradient in both themes - not tied to
+       --blue/--blue-deep, which are redefined lighter in dark mode for text
+       contrast and would otherwise wash the hero background out. */
+    --hero-1:#0F2C54;
+    --hero-2:#1F4E8C;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#0E141F;
+      --paper:#161D2C;
+      --paper-2:#121826;
+      --ink:#E8ECF6;
+      --ink-soft:#A4AFC4;
+      --ink-faint:#707C93;
+      --blue:#6EA0E0;
+      --blue-deep:#9CC0EE;
+      --blue-tint:#1B2A44;
+      --amber:#EFB459;
+      --amber-tint:#332711;
+      --green:#63C08C;
+      --green-bg:#123423;
+      --green-line:#245C3E;
+      --red:#E58077;
+      --red-bg:#3A1A17;
+      --red-line:#6E3129;
+      --line:#2A3550;
+      --line-strong:#3A4A6B;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.35);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#0E141F;
+    --paper:#161D2C;
+    --paper-2:#121826;
+    --ink:#E8ECF6;
+    --ink-soft:#A4AFC4;
+    --ink-faint:#707C93;
+    --blue:#6EA0E0;
+    --blue-deep:#9CC0EE;
+    --blue-tint:#1B2A44;
+    --amber:#EFB459;
+    --amber-tint:#332711;
+    --green:#63C08C;
+    --green-bg:#123423;
+    --green-line:#245C3E;
+    --red:#E58077;
+    --red-bg:#3A1A17;
+    --red-line:#6E3129;
+    --line:#2A3550;
+    --line-strong:#3A4A6B;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.35);
+  }
+
+  *{box-sizing:border-box;}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:"Karla", ui-sans-serif, system-ui, sans-serif;
+    padding-inline:0;
+  }
+  .wrap{
+    max-width:900px;
+    margin:0 auto;
+    padding: 0 20px 80px;
+  }
+  h1,h2,h3{
+    font-family:"Big Shoulders Display","Arial Narrow",sans-serif;
+    text-transform:uppercase;
+    letter-spacing:.02em;
+    text-wrap:balance;
+    margin:0;
+    color:var(--blue-deep);
+  }
+  @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) h1,:root:not([data-theme="light"]) h2,:root:not([data-theme="light"]) h3{ color:var(--blue-deep);} }
+  :root[data-theme="dark"] h1, :root[data-theme="dark"] h2, :root[data-theme="dark"] h3{ color:var(--blue-deep); }
+
+  .mono{ font-family:"JetBrains Mono", ui-monospace, monospace; }
+
+  /* ---------- Header / Titelblock ---------- */
+  .titleblock{
+    background:
+      repeating-linear-gradient(0deg, rgba(255,255,255,.05) 0 1px, transparent 1px 28px),
+      repeating-linear-gradient(90deg, rgba(255,255,255,.05) 0 1px, transparent 1px 28px),
+      linear-gradient(160deg, var(--hero-1), var(--hero-2) 120%);
+    color:#F3F7FF;
+    padding: 44px 20px 34px;
+    margin-bottom: 34px;
+  }
+  .titleblock-inner{ max-width:900px; margin:0 auto; }
+  .eyebrow{
+    font-family:"JetBrains Mono", monospace;
+    font-size:.75rem;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:#BFD4F5;
+    display:flex; align-items:center; gap:8px;
+    margin-bottom:10px;
+  }
+  .eyebrow::before{ content:"◆"; color:var(--amber); font-size:.7rem; }
+  .titleblock h1{
+    color:#FFFFFF;
+    font-size: clamp(2.1rem, 6vw, 3.1rem);
+    line-height:.98;
+  }
+  .titleblock p{
+    color:#D9E4F7;
+    max-width:56ch;
+    margin-top:14px;
+    font-size:1.02rem;
+    line-height:1.55;
+  }
+  .titleblock .meta-row{
+    display:flex; flex-wrap:wrap; gap:10px;
+    margin-top:22px;
+  }
+  .meta-chip{
+    font-family:"JetBrains Mono", monospace;
+    font-size:.72rem;
+    letter-spacing:.04em;
+    background:rgba(255,255,255,.1);
+    border:1px solid rgba(255,255,255,.25);
+    color:#EAF1FF;
+    padding:5px 10px;
+    border-radius:999px;
+  }
+  .byline{
+    margin-top:22px;
+    font-family:"JetBrains Mono", monospace;
+    font-size:.74rem;
+    letter-spacing:.06em;
+    color:#9FB7DE;
+  }
+
+  /* ---------- sticky module nav ---------- */
+  .modnav{
+    position:sticky; top: env(safe-area-inset-top, 0px);
+    z-index:20;
+    background:var(--paper);
+    border-bottom:1px solid var(--line);
+    box-shadow: var(--shadow);
+  }
+  .modnav-inner{
+    max-width:900px; margin:0 auto;
+    display:flex; gap:6px; overflow-x:auto;
+    padding:10px 20px;
+    scrollbar-width:thin;
+  }
+  .modnav a{
+    flex:0 0 auto;
+    display:flex; align-items:center; gap:6px;
+    font-family:"JetBrains Mono",monospace;
+    font-size:.75rem;
+    color:var(--ink-soft);
+    text-decoration:none;
+    padding:7px 12px;
+    border-radius:999px;
+    border:1px solid var(--line);
+    white-space:nowrap;
+    transition:background .15s, color .15s, border-color .15s;
+  }
+  .modnav a:hover{ border-color:var(--blue); color:var(--blue); }
+  .modnav a .dot{
+    width:7px; height:7px; border-radius:50%;
+    background:var(--line-strong);
+    flex:0 0 auto;
+  }
+  .modnav a.done{ border-color:var(--green-line); color:var(--green); background:var(--green-bg); }
+  .modnav a.done .dot{ background:var(--green); }
+
+  /* ---------- module panels ---------- */
+  .modul{
+    position:relative;
+    background:var(--paper);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding: 30px clamp(18px,4vw,40px) 34px;
+    margin-top:34px;
+    box-shadow: var(--shadow);
+    scroll-margin-top: 70px;
+  }
+  .modul::before, .modul::after,
+  .modul .tick-br, .modul .tick-bl{
+    content:""; position:absolute; width:16px; height:16px;
+    border-color:var(--line-strong); border-style:solid; border-width:0;
+  }
+  .modul::before{ top:-1px; left:-1px; border-top-width:2px; border-left-width:2px; }
+  .modul::after{ top:-1px; right:-1px; border-top-width:2px; border-right-width:2px; }
+  .modul .tick-bl{ bottom:-1px; left:-1px; border-bottom-width:2px; border-left-width:2px; }
+  .modul .tick-br{ bottom:-1px; right:-1px; border-bottom-width:2px; border-right-width:2px; }
+
+  .modul-tag{
+    font-family:"JetBrains Mono",monospace;
+    font-size:.72rem; letter-spacing:.1em;
+    color:var(--amber);
+    background:var(--amber-tint);
+    display:inline-block;
+    padding:4px 10px;
+    border-radius:6px;
+    margin-bottom:12px;
+  }
+  .modul h2{ font-size:clamp(1.5rem,3.6vw,1.9rem); color:var(--blue-deep); }
+  .modul .lead{
+    color:var(--ink-soft);
+    max-width:62ch;
+    line-height:1.55;
+    margin-top:10px;
+    font-size:.98rem;
+  }
+  .skill-tag{
+    display:inline-flex; align-items:center; gap:6px;
+    font-family:"JetBrains Mono",monospace;
+    font-size:.68rem; letter-spacing:.06em; text-transform:uppercase;
+    color:var(--blue);
+    background:var(--blue-tint);
+    padding:4px 9px; border-radius:6px;
+    margin-bottom:10px;
+  }
+
+  /* ---------- shared controls ---------- */
+  .btn{
+    font-family:"Karla",sans-serif;
+    font-weight:700;
+    font-size:.92rem;
+    border:none;
+    border-radius:10px;
+    padding:11px 20px;
+    cursor:pointer;
+    color:#fff;
+    background:var(--blue);
+    transition: transform .1s ease, box-shadow .15s ease, background .15s ease;
+  }
+  .btn:hover{ background:var(--blue-deep); }
+  .btn:active{ transform:translateY(1px); }
+  .btn:focus-visible, select:focus-visible, input:focus-visible, a:focus-visible, button:focus-visible{
+    outline: 3px solid var(--amber); outline-offset:2px;
+  }
+  .btn.secondary{
+    background:transparent; color:var(--blue);
+    border:1.5px solid var(--blue);
+  }
+  .btn.secondary:hover{ background:var(--blue-tint); }
+  .btn.amber{ background:var(--amber); color:#3A2705; }
+  .btn.amber:hover{ background:#C17F14; }
+  .btn-row{ display:flex; flex-wrap:wrap; gap:10px; margin-top:18px; align-items:center; }
+
+  select, textarea, input[type=text]{
+    font-family:"Karla",sans-serif;
+    font-size:.95rem;
+    color:var(--ink);
+    background:var(--paper-2);
+    border:1.5px solid var(--line-strong);
+    border-radius:9px;
+    padding:9px 11px;
+    width:100%;
+  }
+  textarea{ resize:vertical; min-height:64px; line-height:1.5; }
+  label{ font-weight:600; font-size:.86rem; color:var(--ink-soft); display:block; margin-bottom:5px; }
+
+  .feedback-msg{
+    margin-top:16px; padding:12px 14px; border-radius:10px;
+    font-size:.92rem; line-height:1.5; display:none;
+  }
+  .feedback-msg.show{ display:block; }
+  .feedback-msg.ok{ background:var(--green-bg); color:var(--green); border:1px solid var(--green-line); }
+  .feedback-msg.warn{ background:var(--red-bg); color:var(--red); border:1px solid var(--red-line); }
+
+  /* ---------- Modul 1: matching ---------- */
+  .chain-row{
+    display:grid;
+    grid-template-columns: 1.3fr 1fr 1fr;
+    gap:14px;
+    padding:16px 0;
+    border-top:1px dashed var(--line);
+    align-items:start;
+  }
+  .chain-row:first-of-type{ border-top:none; }
+  @media (max-width:620px){ .chain-row{ grid-template-columns:1fr; } }
+  .chain-behauptung{
+    font-size:.95rem; line-height:1.5;
+    background:var(--paper-2);
+    border-left:3px solid var(--blue);
+    padding:10px 12px;
+    border-radius: 0 8px 8px 0;
+  }
+  .chain-behauptung .k{
+    display:block; font-family:"JetBrains Mono",monospace; font-size:.68rem;
+    color:var(--blue); letter-spacing:.06em; margin-bottom:4px;
+  }
+  .field-block .k{
+    display:block; font-family:"JetBrains Mono",monospace; font-size:.68rem;
+    color:var(--ink-faint); letter-spacing:.06em; margin-bottom:5px;
+  }
+  .row-result{ font-size:1.1rem; }
+
+  /* ---------- Modul 2: ordering ---------- */
+  .order-list{ list-style:none; margin:18px 0 0; padding:0; display:flex; flex-direction:column; gap:8px; }
+  .order-item{
+    display:flex; align-items:center; gap:12px;
+    background:var(--paper-2);
+    border:1.5px solid var(--line);
+    border-radius:10px;
+    padding:11px 12px;
+  }
+  .order-item .pos{
+    font-family:"JetBrains Mono",monospace;
+    font-weight:600; font-size:.85rem;
+    color:var(--ink-faint);
+    width:1.6em;
+  }
+  .order-item .txt{ flex:1; font-size:.94rem; line-height:1.4; }
+  .order-item .moves{ display:flex; gap:4px; }
+  .order-item .moves button{
+    width:30px; height:30px; border-radius:7px;
+    border:1.5px solid var(--line-strong);
+    background:var(--paper); color:var(--ink-soft);
+    cursor:pointer; font-size:.9rem; line-height:1;
+  }
+  .order-item .moves button:hover{ border-color:var(--blue); color:var(--blue); }
+  .order-item.correct{ border-color:var(--green-line); background:var(--green-bg); }
+  .order-item.wrong{ border-color:var(--red-line); background:var(--red-bg); }
+
+  /* ---------- Modul 3: sorting phrases ---------- */
+  .phrase-grid{
+    display:grid; gap:10px;
+    grid-template-columns: repeat(auto-fill,minmax(260px,1fr));
+    margin-top:16px;
+  }
+  .phrase-card{
+    background:var(--paper-2);
+    border:1.5px solid var(--line);
+    border-radius:10px;
+    padding:10px 12px;
+  }
+  .phrase-card q{ font-size:.9rem; line-height:1.4; display:block; margin-bottom:8px; quotes: "„" '"' "‚" "'"; }
+  .phrase-card.correct{ border-color:var(--green-line); background:var(--green-bg); }
+  .phrase-card.wrong{ border-color:var(--red-line); background:var(--red-bg); }
+
+  /* ---------- Modul 4: cloze ---------- */
+  .cloze-sent{
+    padding:14px 14px 14px 16px; border-top:1px dashed var(--line);
+    border-left:3px solid transparent;
+    border-radius: 0 8px 8px 0;
+    transition: background .15s, border-color .15s;
+  }
+  .cloze-sent:first-of-type{ border-top:none; }
+  .cloze-sent p{ margin:0 0 10px; line-height:1.6; font-size:.98rem; }
+  .cloze-sent.wrong{ border-left-color:var(--red); background:var(--red-bg); }
+  .cloze-sent.correct{ border-left-color:var(--green); background:var(--green-bg); }
+  .cloze-sent .blank-tag{
+    font-family:"JetBrains Mono",monospace; font-size:.72rem;
+    color:#fff; background:var(--blue); border-radius:5px; padding:1px 7px; margin:0 2px;
+  }
+  .opts{ display:flex; flex-wrap:wrap; gap:8px; }
+  .opt{
+    font-size:.88rem;
+    border:1.5px solid var(--line-strong);
+    background:var(--paper-2);
+    border-radius:8px;
+    padding:8px 12px;
+    cursor:pointer;
+  }
+  .opt input{ margin-right:7px; }
+  .cloze-sent.correct .opts{ }
+  .opt.is-correct{ border-color:var(--green-line); background:var(--green-bg); color:var(--green); }
+  .opt.is-wrong{ border-color:var(--red-line); background:var(--red-bg); color:var(--red); }
+
+  /* ---------- Modul 5: builder ---------- */
+  .builder-grid{ display:grid; gap:16px; margin-top:18px; }
+  .field-block{ display:grid; gap:8px; }
+  .starter-row{ display:grid; grid-template-columns: 1fr 1.6fr; gap:10px; }
+  @media (max-width:560px){ .starter-row{ grid-template-columns:1fr; } }
+  .preview-box{
+    margin-top:18px;
+    background:var(--blue-tint);
+    border:1.5px solid var(--line-strong);
+    border-radius:10px;
+    padding:16px;
+    font-size:1rem; line-height:1.6;
+    min-height:70px;
+  }
+  .preview-box .ph{ color:var(--ink-faint); font-style:italic; }
+  .radio-pair{ display:flex; gap:16px; }
+  .radio-pair label{ display:flex; align-items:center; gap:6px; font-weight:600; color:var(--ink); margin:0;}
+
+  /* ---------- Modul 6 ---------- */
+  .m6-sub{
+    font-size:1.1rem; color:var(--blue-deep); margin-top:30px; margin-bottom:2px;
+    padding-top:20px; border-top:1px solid var(--line);
+  }
+  .revcheck-group{ margin-top:18px; }
+  .revcheck-group h4{
+    font-family:"JetBrains Mono",monospace; text-transform:uppercase;
+    font-size:.72rem; letter-spacing:.08em; color:var(--ink-faint);
+    margin:0 0 8px;
+  }
+  .revcheck-item{
+    display:flex; align-items:flex-start; gap:10px;
+    padding:9px 0; border-top:1px dashed var(--line);
+    font-size:.94rem; line-height:1.5;
+  }
+  .revcheck-group .revcheck-item:first-of-type{ border-top:none; }
+  .revcheck-item input{ margin-top:4px; flex:0 0 auto; width:17px; height:17px; }
+  .revcheck-item label{ font-weight:400; color:var(--ink); margin:0; cursor:pointer; }
+  .revcheck-count{
+    margin-top:16px; font-size:.85rem; color:var(--ink-soft);
+  }
+
+  footer{
+    max-width:900px; margin: 46px auto 0; padding:0 20px;
+    color:var(--ink-faint); font-size:.85rem; text-align:center;
+    display:flex; flex-direction:column; gap:10px; align-items:center;
+  }
+  .footer-credit{
+    margin-top:8px; padding-top:16px; width:100%;
+    border-top:1px dashed var(--line);
+    font-family:"JetBrains Mono", monospace;
+    font-size:.72rem; letter-spacing:.04em;
+    color:var(--ink-faint);
+  }
+</style>
+</head>
+<body>
+
+
+<div class="titleblock">
+  <div class="titleblock-inner">
+    <div class="eyebrow">Deutsch · Klasse 9b · Lineare Erörterung</div>
+    <h1>Argumentations&#8209;Werkstatt</h1>
+    <p>Sechs Stationen, an denen du den Aufbau von Argumenten, den Aufbau einer ganzen Erörterung und passende Formulierungen trainierst &ndash; und deine Probeklassenarbeit zu „Schein und Sein“ überarbeitest.</p>
+    <div class="meta-row">
+      <span class="meta-chip">M1 &middot; Argumentketten</span>
+      <span class="meta-chip">M2 &middot; Bauplan</span>
+      <span class="meta-chip">M3 &middot; Formulierungen</span>
+      <span class="meta-chip">M4 &middot; Lückentext</span>
+      <span class="meta-chip">M5 &middot; Eigene Erörterung</span>
+      <span class="meta-chip">M6 &middot; Probeklassenarbeit</span>
+    </div>
+    <p class="byline">Erstellt von Fr. Heymann-Lorch</p>
+  </div>
+</div>
+
+<nav class="modnav">
+  <div class="modnav-inner" id="modnav-inner">
+    <a href="#m1" data-mod="1"><span class="dot"></span>M1 Ketten</a>
+    <a href="#m2" data-mod="2"><span class="dot"></span>M2 Bauplan</a>
+    <a href="#m3" data-mod="3"><span class="dot"></span>M3 Bausteine</a>
+    <a href="#m4" data-mod="4"><span class="dot"></span>M4 Lückentext</a>
+    <a href="#m5" data-mod="5"><span class="dot"></span>M5 Eigene Erörterung</a>
+    <a href="#m6" data-mod="6"><span class="dot"></span>M6 Probeklassenarbeit</a>
+  </div>
+</nav>
+
+<div class="wrap">
+
+  <!-- ================= MODUL 1 ================= -->
+  <section class="modul" id="m1">
+    <span class="tick-br"></span><span class="tick-bl"></span>
+    <div class="modul-tag">MODUL 01</div>
+    <div class="skill-tag">Aufbau eines Arguments</div>
+    <h2>Der Dreiklang: Behauptung &ndash; Begründung &ndash; Beispiel</h2>
+    <p class="lead">Jedes gute Argument besteht aus drei Teilen. Ordne jeder Behauptung die passende Begründung und das passende Beispiel zu.</p>
+
+    <div id="m1-rows"></div>
+
+    <div class="btn-row">
+      <button class="btn" id="m1-check">Prüfen</button>
+      <button class="btn secondary" id="m1-reset">Neu mischen</button>
+    </div>
+    <div class="feedback-msg" id="m1-feedback"></div>
+  </section>
+
+  <!-- ================= MODUL 2 ================= -->
+  <section class="modul" id="m2">
+    <span class="tick-br"></span><span class="tick-bl"></span>
+    <div class="modul-tag">MODUL 02</div>
+    <div class="skill-tag">Aufbau der ganzen Erörterung</div>
+    <h2>Der Bauplan einer linearen Erörterung</h2>
+    <p class="lead">Bring die Bauteile einer linearen Erörterung mit den Pfeil-Buttons in die richtige Reihenfolge &ndash; vom ersten bis zum letzten Satz.</p>
+
+    <ol class="order-list" id="m2-list"></ol>
+
+    <div class="btn-row">
+      <button class="btn" id="m2-check">Prüfen</button>
+      <button class="btn secondary" id="m2-reset">Neu mischen</button>
+    </div>
+    <div class="feedback-msg" id="m2-feedback"></div>
+  </section>
+
+  <!-- ================= MODUL 3 ================= -->
+  <section class="modul" id="m3">
+    <span class="tick-br"></span><span class="tick-bl"></span>
+    <div class="modul-tag">MODUL 03</div>
+    <div class="skill-tag">Formulieren von Argumenten</div>
+    <h2>Der Formulierungs-Werkzeugkasten</h2>
+    <p class="lead">Jede Formulierung hat eine Aufgabe im Text. Wähle bei jeder Karte aus, wofür man sie benutzt.</p>
+
+    <div class="phrase-grid" id="m3-grid"></div>
+
+    <div class="btn-row">
+      <button class="btn" id="m3-check">Prüfen</button>
+      <button class="btn secondary" id="m3-reset">Neu mischen</button>
+    </div>
+    <div class="feedback-msg" id="m3-feedback"></div>
+  </section>
+
+  <!-- ================= MODUL 4 ================= -->
+  <section class="modul" id="m4">
+    <span class="tick-br"></span><span class="tick-bl"></span>
+    <div class="modul-tag">MODUL 04</div>
+    <div class="skill-tag">Formulieren im Zusammenhang</div>
+    <h2>Text-Baustelle: Fülle die Lücken</h2>
+    <p class="lead">Thema: <em>Sollten Schülerinnen und Schüler mehr Mitspracherecht an der Schule bekommen?</em> Wähle für jede Lücke die Formulierung, die an dieser Stelle im Text passt.</p>
+
+    <div id="m4-sentences"></div>
+
+    <div class="btn-row">
+      <button class="btn" id="m4-check">Prüfen</button>
+      <button class="btn secondary" id="m4-reset">Neu mischen</button>
+    </div>
+    <div class="feedback-msg" id="m4-feedback"></div>
+  </section>
+
+  <!-- ================= MODUL 5 ================= -->
+  <section class="modul" id="m5">
+    <span class="tick-br"></span><span class="tick-bl"></span>
+    <div class="modul-tag">MODUL 05 &middot; KÖNIGSDISZIPLIN</div>
+    <div class="skill-tag">Alles zusammen</div>
+    <h2>Baue dein eigenes Argument</h2>
+    <p class="lead">Wähle ein Thema und deine Position. Wähle für jeden Baustein einen Satzanfang &ndash; und schreibe den Rest selbst. Rechts entsteht dein fertiges Argument.</p>
+
+    <div class="builder-grid">
+      <div class="field-block">
+        <label for="m5-thema">Thema</label>
+        <select id="m5-thema"></select>
+      </div>
+
+      <div class="field-block">
+        <label>Deine Position</label>
+        <div class="radio-pair">
+          <label><input type="radio" name="m5-pos" value="dafür" checked> dafür</label>
+          <label><input type="radio" name="m5-pos" value="dagegen"> dagegen</label>
+        </div>
+      </div>
+
+      <div class="field-block">
+        <span class="k">BEHAUPTUNG</span>
+        <div class="starter-row">
+          <select id="m5-b-starter"></select>
+          <input type="text" id="m5-b-text" placeholder="z. B. sollten Handys im Unterricht erlaubt sein, um …">
+        </div>
+      </div>
+
+      <div class="field-block">
+        <span class="k">BEGRÜNDUNG</span>
+        <div class="starter-row">
+          <select id="m5-g-starter"></select>
+          <input type="text" id="m5-g-text" placeholder="z. B. viele Jugendliche lernen dadurch …">
+        </div>
+      </div>
+
+      <div class="field-block">
+        <span class="k">BEISPIEL</span>
+        <div class="starter-row">
+          <select id="m5-e-starter"></select>
+          <input type="text" id="m5-e-text" placeholder="z. B. an unserer Schule zeigt sich das daran, dass …">
+        </div>
+      </div>
+    </div>
+
+    <div class="preview-box" id="m5-preview"><span class="ph">Dein Argument erscheint hier, sobald du oben etwas einträgst …</span></div>
+
+    <div class="btn-row">
+      <button class="btn amber" id="m5-copy">In Zwischenablage kopieren</button>
+      <button class="btn secondary" id="m5-reset">Felder leeren</button>
+    </div>
+    <div class="feedback-msg" id="m5-feedback"></div>
+  </section>
+
+  <!-- ================= MODUL 6 ================= -->
+  <section class="modul" id="m6">
+    <span class="tick-br"></span><span class="tick-bl"></span>
+    <div class="modul-tag">MODUL 06 &middot; VORBEREITUNG KLASSENARBEIT</div>
+    <div class="skill-tag">Deine Probeklassenarbeit überarbeiten</div>
+    <h2>Check: Schein und Sein</h2>
+    <p class="lead">Hol dir deine Probeklassenarbeit zu „Schein und Sein“. Prüfe zuerst mit dem Fakten-Check, ob du dich an den Text richtig erinnerst &ndash; und geh dann mit der Checkliste Punkt für Punkt durch deinen eigenen Text.</p>
+
+    <h3 class="m6-sub">Teil A &middot; Fakten-Check</h3>
+    <p class="lead">Richtig oder falsch? Entscheide bei jeder Aussage, ob sie wirklich so im Text „Schein und Sein“ steht.</p>
+
+    <div id="m6-facts"></div>
+
+    <div class="btn-row">
+      <button class="btn" id="m6-check">Prüfen</button>
+      <button class="btn secondary" id="m6-reset">Neu mischen</button>
+    </div>
+    <div class="feedback-msg" id="m6-feedback"></div>
+
+    <h3 class="m6-sub">Teil B &middot; Revisions-Checkliste</h3>
+    <p class="lead">Geh jetzt deine eigene Probeklassenarbeit durch und hake ab, was schon gelingt. Was du noch nicht abhaken kannst, überarbeitest du jetzt.</p>
+
+    <div id="m6-checklist"></div>
+    <div class="revcheck-count">Abgehakt: <span class="mono" id="m6-count">0</span> / <span class="mono" id="m6-total">0</span></div>
+
+    <div class="field-block" style="margin-top:18px;">
+      <label for="m6-notes">Meine wichtigsten Verbesserungen für die Überarbeitung</label>
+      <textarea id="m6-notes" placeholder="z. B. Ich muss beim 2. Argument noch einen Fakt aus dem Text ergänzen …"></textarea>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn amber" id="m6-copy">Notizen in Zwischenablage kopieren</button>
+      <button class="btn secondary" id="m6-checklist-reset">Checkliste zurücksetzen</button>
+    </div>
+    <div class="feedback-msg" id="m6-notes-feedback"></div>
+  </section>
+
+  <footer>
+    <div>Fortschritt: <span class="mono" id="progress-count">0</span> / 6 Module geprüft &mdash; weiter geht's!</div>
+    <button class="btn secondary" id="reset-all">Gesamten Fortschritt zurücksetzen</button>
+    <div class="footer-credit">Argumentations&#8209;Werkstatt &middot; erstellt von Fr. Heymann-Lorch &middot; Deutsch, Klasse 9b</div>
+  </footer>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  function shuffle(arr){
+    var a = arr.slice();
+    for(var i=a.length-1;i>0;i--){
+      var j = Math.floor(Math.random()*(i+1));
+      var t=a[i]; a[i]=a[j]; a[j]=t;
+    }
+    return a;
+  }
+
+  function markDone(modId){
+    try{
+      var link = document.querySelector('.modnav a[data-mod="'+modId+'"]');
+      if(link) link.classList.add('done');
+      updateProgress();
+      try{ localStorage.setItem('argw-done-'+modId, '1'); }catch(e){}
+    }catch(e){}
+  }
+  function updateProgress(){
+    var n = document.querySelectorAll('.modnav a.done').length;
+    var el = document.getElementById('progress-count');
+    if(el) el.textContent = String(n);
+  }
+  function restoreDone(){
+    try{
+      for(var i=1;i<=6;i++){
+        if(localStorage.getItem('argw-done-'+i)==='1'){
+          var link = document.querySelector('.modnav a[data-mod="'+i+'"]');
+          if(link) link.classList.add('done');
+        }
+      }
+      updateProgress();
+    }catch(e){}
+  }
+
+  /* ================= MODUL 1: Ketten ================= */
+  var chains = [
+    {
+      behauptung: "Handys sollten während des Unterrichts nicht erlaubt sein.",
+      begruendung: "Denn sie lenken viele Schülerinnen und Schüler stark vom Lernen ab.",
+      beispiel: "Wenn in der Pause ständig Nachrichten ankommen, denken viele schon in der nächsten Stunde eher an ihr Handy als an den Unterricht."
+    },
+    {
+      behauptung: "Jugendliche sollten sich mehr ehrenamtlich engagieren.",
+      begruendung: "Denn dadurch lernen sie, Verantwortung zu übernehmen und wichtige soziale Fähigkeiten zu entwickeln.",
+      beispiel: "Wer zum Beispiel bei der Jugendfeuerwehr mitarbeitet, lernt Teamarbeit und Zuverlässigkeit fürs ganze Leben."
+    },
+    {
+      behauptung: "Die Schulmensa sollte täglich ein vegetarisches Gericht anbieten.",
+      begruendung: "Denn nicht alle Schülerinnen und Schüler essen aus religiösen, gesundheitlichen oder persönlichen Gründen Fleisch.",
+      beispiel: "An unserer Schule gibt es bereits mehrere Schülerinnen und Schüler, die sich vegetarisch ernähren und oft nur eine Beilage essen können."
+    },
+    {
+      behauptung: "Das Wahlrecht sollte schon ab 16 Jahren gelten.",
+      begruendung: "Denn politische Entscheidungen betreffen auch Jugendliche direkt, zum Beispiel beim Klimaschutz oder in der Bildungspolitik.",
+      beispiel: "Viele 16-Jährige informieren sich heute intensiv über Politik, etwa über soziale Medien oder im Politikunterricht."
+    }
+  ];
+
+  var m1state = { begOrder: [], beiOrder: [] };
+
+  function buildM1(){
+    var container = document.getElementById('m1-rows');
+    container.innerHTML = '';
+    m1state.begOrder = shuffle(chains.map(function(c,i){return i;}));
+    m1state.beiOrder = shuffle(chains.map(function(c,i){return i;}));
+
+    chains.forEach(function(chain, idx){
+      var row = document.createElement('div');
+      row.className = 'chain-row';
+      row.setAttribute('data-idx', idx);
+
+      var beh = document.createElement('div');
+      beh.className = 'chain-behauptung';
+      beh.innerHTML = '<span class="k">BEHAUPTUNG</span>' + chain.behauptung;
+      row.appendChild(beh);
+
+      var begField = document.createElement('div');
+      begField.className = 'field-block';
+      var begSelect = document.createElement('select');
+      begSelect.id = 'm1-beg-' + idx;
+      begSelect.innerHTML = '<option value="">Begründung wählen …</option>' +
+        m1state.begOrder.map(function(i){ return '<option value="'+i+'">'+chains[i].begruendung+'</option>'; }).join('');
+      begField.innerHTML = '<span class="k">BEGRÜNDUNG</span>';
+      begField.appendChild(begSelect);
+      row.appendChild(begField);
+
+      var beiField = document.createElement('div');
+      beiField.className = 'field-block';
+      var beiSelect = document.createElement('select');
+      beiSelect.id = 'm1-bei-' + idx;
+      beiSelect.innerHTML = '<option value="">Beispiel wählen …</option>' +
+        m1state.beiOrder.map(function(i){ return '<option value="'+i+'">'+chains[i].beispiel+'</option>'; }).join('');
+      beiField.innerHTML = '<span class="k">BEISPIEL</span>';
+      beiField.appendChild(beiSelect);
+      row.appendChild(beiField);
+
+      container.appendChild(row);
+    });
+  }
+
+  document.getElementById('m1-check').addEventListener('click', function(){
+    var allAnswered = true, allCorrect = true;
+    chains.forEach(function(chain, idx){
+      var begSel = document.getElementById('m1-beg-'+idx);
+      var beiSel = document.getElementById('m1-bei-'+idx);
+      var row = document.querySelector('.chain-row[data-idx="'+idx+'"]');
+      if(!begSel.value || !beiSel.value){ allAnswered = false; row.style.outline='2px dashed var(--amber)'; return; }
+      row.style.outline='none';
+      var ok = (Number(begSel.value)===idx) && (Number(beiSel.value)===idx);
+      begSel.style.borderColor = (Number(begSel.value)===idx) ? 'var(--green-line)' : 'var(--red-line)';
+      beiSel.style.borderColor = (Number(beiSel.value)===idx) ? 'var(--green-line)' : 'var(--red-line)';
+      if(!ok) allCorrect = false;
+    });
+    var fb = document.getElementById('m1-feedback');
+    fb.classList.add('show');
+    if(!allAnswered){
+      fb.className = 'feedback-msg show warn';
+      fb.textContent = 'Bitte fülle zuerst alle Felder aus.';
+    } else if(allCorrect){
+      fb.className = 'feedback-msg show ok';
+      fb.textContent = 'Stark! Alle vier Argumentketten passen zusammen.';
+      markDone(1);
+    } else {
+      fb.className = 'feedback-msg show warn';
+      fb.textContent = 'Noch nicht alles passt zusammen – rot markierte Felder noch einmal überdenken.';
+    }
+  });
+  document.getElementById('m1-reset').addEventListener('click', function(){
+    buildM1();
+    document.getElementById('m1-feedback').classList.remove('show');
+  });
+  buildM1();
+
+  /* ================= MODUL 2: Bauplan ================= */
+  var planCorrect = [
+    { key:'einleitung', txt:'Einleitung – Thema nennen und Interesse wecken' },
+    { key:'arg1', txt:'1. Argument – das am wenigsten wichtige' },
+    { key:'arg2', txt:'2. Argument – ein wichtigeres Argument' },
+    { key:'arg3', txt:'3. Argument – das wichtigste, stärkste Argument' },
+    { key:'schluss', txt:'Schluss – Zusammenfassung und eigene Meinung' }
+  ];
+  var m2order = [];
+
+  function buildM2(){
+    m2order = shuffle(planCorrect.map(function(p,i){return i;}));
+    renderM2();
+  }
+  function renderM2(){
+    var list = document.getElementById('m2-list');
+    list.innerHTML = '';
+    m2order.forEach(function(origIdx, pos){
+      var li = document.createElement('li');
+      li.className = 'order-item';
+      li.setAttribute('data-orig', origIdx);
+      li.innerHTML =
+        '<span class="pos mono">'+(pos+1)+'</span>' +
+        '<span class="txt">'+planCorrect[origIdx].txt+'</span>' +
+        '<span class="moves"><button type="button" data-dir="-1" aria-label="nach oben">&uarr;</button>' +
+        '<button type="button" data-dir="1" aria-label="nach unten">&darr;</button></span>';
+      list.appendChild(li);
+    });
+    Array.prototype.forEach.call(list.querySelectorAll('button'), function(btn){
+      btn.addEventListener('click', function(){
+        var li = btn.closest('.order-item');
+        var idx = Array.prototype.indexOf.call(list.children, li);
+        var dir = Number(btn.getAttribute('data-dir'));
+        var newIdx = idx + dir;
+        if(newIdx < 0 || newIdx >= m2order.length) return;
+        var tmp = m2order[idx]; m2order[idx] = m2order[newIdx]; m2order[newIdx] = tmp;
+        renderM2();
+        document.getElementById('m2-feedback').classList.remove('show');
+      });
+    });
+  }
+
+  document.getElementById('m2-check').addEventListener('click', function(){
+    var list = document.getElementById('m2-list');
+    var allCorrect = true;
+    Array.prototype.forEach.call(list.children, function(li, pos){
+      var orig = Number(li.getAttribute('data-orig'));
+      var ok = (orig === pos);
+      li.classList.remove('correct','wrong');
+      li.classList.add(ok ? 'correct' : 'wrong');
+      if(!ok) allCorrect = false;
+    });
+    var fb = document.getElementById('m2-feedback');
+    fb.classList.add('show');
+    if(allCorrect){
+      fb.className = 'feedback-msg show ok';
+      fb.textContent = 'Genau richtig! So ist der Bauplan einer linearen Erörterung aufgebaut.';
+      markDone(2);
+    } else {
+      fb.className = 'feedback-msg show warn';
+      fb.textContent = 'Die grün markierten Bauteile stehen schon richtig, die roten vertausche noch einmal.';
+    }
+  });
+  document.getElementById('m2-reset').addEventListener('click', function(){
+    buildM2();
+    document.getElementById('m2-feedback').classList.remove('show');
+  });
+  buildM2();
+
+  /* ================= MODUL 3: Formulierungs-Werkzeugkasten ================= */
+  var categories = [
+    { key:'einleitung', label:'Behauptung / Einleitung' },
+    { key:'arg1', label:'1. Argument einleiten' },
+    { key:'arg2', label:'2. Argument einleiten' },
+    { key:'argwichtig', label:'Besonders wichtiges Argument' },
+    { key:'beispiel', label:'Beispiel einleiten' },
+    { key:'zusammenfassung', label:'Zusammenfassung einleiten' },
+    { key:'meinung', label:'Eigene Meinung einleiten' }
+  ];
+  var phrases = [
+    { txt:'Immer häufiger wird diskutiert, …', key:'einleitung' },
+    { txt:'Viele Menschen sind der Meinung, …', key:'einleitung' },
+    { txt:'In den Medien wird immer wieder berichtet, dass …', key:'einleitung' },
+    { txt:'Zunächst …', key:'arg1' },
+    { txt:'An erster Stelle wäre zu erwähnen, dass …', key:'arg1' },
+    { txt:'Dafür spricht, dass …', key:'arg1' },
+    { txt:'Darüber hinaus …', key:'arg2' },
+    { txt:'Ein weiteres Argument ist, dass …', key:'arg2' },
+    { txt:'Des Weiteren …', key:'arg2' },
+    { txt:'Das wichtigste Argument ist jedoch, dass …', key:'argwichtig' },
+    { txt:'Das mit Abstand stärkste Argument ist, …', key:'argwichtig' },
+    { txt:'Am deutlichsten wird dies daran, …', key:'argwichtig' },
+    { txt:'Zum Beispiel …', key:'beispiel' },
+    { txt:'Beispielsweise …', key:'beispiel' },
+    { txt:'Zusammenfassend lässt sich sagen, dass …', key:'zusammenfassung' },
+    { txt:'Insgesamt wird also deutlich, dass …', key:'zusammenfassung' },
+    { txt:'Die aufgeführten Argumente zeigen, dass …', key:'zusammenfassung' },
+    { txt:'Meiner Meinung nach …', key:'meinung' },
+    { txt:'Ich vertrete den Standpunkt, dass …', key:'meinung' },
+    { txt:'Als Kompromiss schlage ich vor, dass …', key:'meinung' }
+  ];
+
+  function buildM3(){
+    var grid = document.getElementById('m3-grid');
+    grid.innerHTML = '';
+    var order = shuffle(phrases.map(function(p,i){return i;}));
+    order.forEach(function(i){
+      var p = phrases[i];
+      var card = document.createElement('div');
+      card.className = 'phrase-card';
+      card.setAttribute('data-key', p.key);
+      var sel = document.createElement('select');
+      sel.id = 'm3-sel-' + i;
+      sel.innerHTML = '<option value="">Wofür steht das?</option>' +
+        categories.map(function(c){ return '<option value="'+c.key+'">'+c.label+'</option>'; }).join('');
+      card.innerHTML = '<q>'+p.txt+'</q>';
+      card.appendChild(sel);
+      grid.appendChild(card);
+    });
+  }
+
+  document.getElementById('m3-check').addEventListener('click', function(){
+    var cards = document.querySelectorAll('#m3-grid .phrase-card');
+    var allAnswered = true, allCorrect = true;
+    cards.forEach(function(card){
+      var sel = card.querySelector('select');
+      card.classList.remove('correct','wrong');
+      if(!sel.value){ allAnswered = false; return; }
+      var ok = sel.value === card.getAttribute('data-key');
+      card.classList.add(ok ? 'correct' : 'wrong');
+      if(!ok) allCorrect = false;
+    });
+    var fb = document.getElementById('m3-feedback');
+    fb.classList.add('show');
+    if(!allAnswered){
+      fb.className = 'feedback-msg show warn';
+      fb.textContent = 'Ordne bitte erst jeder Karte eine Funktion zu, dann kannst du prüfen.';
+    } else if(allCorrect){
+      fb.className = 'feedback-msg show ok';
+      fb.textContent = 'Perfekt sortiert! Diese Werkzeuge kannst du jetzt gezielt beim Schreiben einsetzen.';
+      markDone(3);
+    } else {
+      fb.className = 'feedback-msg show warn';
+      fb.textContent = 'Grün markierte Karten stimmen schon, bei den roten noch einmal überlegen, welche Aufgabe die Formulierung im Text hat.';
+    }
+  });
+  document.getElementById('m3-reset').addEventListener('click', function(){
+    buildM3();
+    document.getElementById('m3-feedback').classList.remove('show');
+  });
+  buildM3();
+
+  /* ================= MODUL 4: Lückentext ================= */
+  var clozeData = [
+    {
+      before: '', after: ' wird an vielen Schulen diskutiert, ob Schülerinnen und Schüler bei wichtigen Entscheidungen stärker mitbestimmen dürfen.',
+      options: shuffle(['Immer häufiger','Zusammenfassend lässt sich sagen','Ein weiteres Argument ist']),
+      correct: 'Immer häufiger'
+    },
+    {
+      before: '', after: ', dass Jugendliche durch Mitbestimmung lernen, Verantwortung zu übernehmen.',
+      options: shuffle(['Zunächst spricht dafür','Beispielsweise zeigt sich','Meiner Meinung nach']),
+      correct: 'Zunächst spricht dafür'
+    },
+    {
+      before: '', after: ' könnte ein Schülerrat mitentscheiden, wie die Pausenhalle gestaltet wird.',
+      options: shuffle(['Zum Beispiel','Darüber hinaus','Insgesamt']),
+      correct: 'Zum Beispiel'
+    },
+    {
+      before: '', after: ' ist jedoch, dass Jugendliche eigene Erfahrungen mit Demokratie sammeln, die sie ihr Leben lang begleiten.',
+      options: shuffle(['Das wichtigste Argument','Zunächst','Zum Beispiel']),
+      correct: 'Das wichtigste Argument'
+    },
+    {
+      before: '', after: ', dass Mitbestimmung Jugendlichen wichtige Fähigkeiten vermittelt.',
+      options: shuffle(['Zusammenfassend lässt sich sagen','Ein weiteres Argument ist','Zum Beispiel']),
+      correct: 'Zusammenfassend lässt sich sagen'
+    },
+    {
+      before: '', after: ' sollten Schulen mehr Mitspracherecht für Schülerinnen und Schüler einführen.',
+      options: shuffle(['Meiner Meinung nach','Darüber hinaus','Zunächst']),
+      correct: 'Meiner Meinung nach'
+    }
+  ];
+
+  function buildM4(){
+    var wrap = document.getElementById('m4-sentences');
+    wrap.innerHTML = '';
+    clozeData.forEach(function(sent, i){
+      var div = document.createElement('div');
+      div.className = 'cloze-sent';
+      div.setAttribute('data-idx', i);
+      var p = document.createElement('p');
+      p.innerHTML = '<span class="blank-tag mono">Satz '+(i+1)+'</span> ____________' + sent.after;
+      div.appendChild(p);
+      var opts = document.createElement('div');
+      opts.className = 'opts';
+      sent.options.forEach(function(opt, j){
+        var id = 'm4-'+i+'-'+j;
+        var label = document.createElement('label');
+        label.className = 'opt';
+        label.setAttribute('for', id);
+        label.innerHTML = '<input type="radio" id="'+id+'" name="m4-q'+i+'" value="'+opt.replace(/"/g,'&quot;')+'"> '+opt;
+        opts.appendChild(label);
+      });
+      div.appendChild(opts);
+      wrap.appendChild(div);
+    });
+  }
+
+  document.getElementById('m4-check').addEventListener('click', function(){
+    var allAnswered = true, allCorrect = true, wrongNums = [];
+    clozeData.forEach(function(sent, i){
+      var checked = document.querySelector('input[name="m4-q'+i+'"]:checked');
+      var sentEl = document.querySelector('#m4-sentences .cloze-sent[data-idx="'+i+'"]');
+      Array.prototype.forEach.call(sentEl.querySelectorAll('.opt'), function(o){ o.classList.remove('is-correct','is-wrong'); });
+      sentEl.classList.remove('correct','wrong');
+      if(!checked){ allAnswered = false; return; }
+      var ok = checked.value === sent.correct;
+      if(!ok){
+        allCorrect = false;
+        wrongNums.push(i+1);
+        sentEl.classList.add('wrong');
+        checked.closest('.opt').classList.add('is-wrong');
+        var correctInput = sentEl.querySelector('input[value="'+sent.correct.replace(/"/g,'&quot;')+'"]');
+        if(correctInput) correctInput.closest('.opt').classList.add('is-correct');
+      } else {
+        sentEl.classList.add('correct');
+        checked.closest('.opt').classList.add('is-correct');
+      }
+    });
+    var fb = document.getElementById('m4-feedback');
+    fb.classList.add('show');
+    if(!allAnswered){
+      fb.className = 'feedback-msg show warn';
+      fb.textContent = 'Bitte kreuze bei jedem Satz eine Formulierung an.';
+    } else if(allCorrect){
+      fb.className = 'feedback-msg show ok';
+      fb.textContent = 'Alles richtig! Du hörst genau, welche Formulierung an welche Stelle im Text gehört.';
+      markDone(4);
+    } else {
+      fb.className = 'feedback-msg show warn';
+      var satzWord = wrongNums.length === 1 ? 'Satz' : 'Sätze';
+      fb.textContent = 'Schau dir noch einmal ' + satzWord + ' ' + wrongNums.join(', ') + ' an – dort ist der Satz jetzt rot markiert. Grün zeigt dir dort die passende Formulierung.';
+    }
+  });
+  document.getElementById('m4-reset').addEventListener('click', function(){
+    clozeData.forEach(function(sent){ sent.options = shuffle(sent.options); });
+    buildM4();
+    document.getElementById('m4-feedback').classList.remove('show');
+  });
+  buildM4();
+
+  /* ================= MODUL 5: Eigene Erörterung ================= */
+  var themen = [
+    'Sollten Handys in der Schule komplett verboten werden?',
+    'Sollte unsere Schule eine Cafeteria mit gesundem Essen bekommen?',
+    'Sollten Hausaufgaben abgeschafft werden?',
+    'Sollte es an unserer Schule mehr AGs (Arbeitsgemeinschaften) geben?',
+    'Sollten Schülerinnen und Schüler ab Klasse 9 bei der Wahl der Klassenfahrt mitentscheiden dürfen?'
+  ];
+  var behauptungStarters = ['Meiner Meinung nach','Ich vertrete den Standpunkt, dass','Ich bin der Auffassung, dass'];
+  var begruendungStarters = ['Zunächst spricht dafür, dass','Darüber hinaus','Das wichtigste Argument ist, dass'];
+  var beispielStarters = ['Zum Beispiel','Beispielsweise','Das zeigt sich etwa daran, dass'];
+
+  function fillSelect(id, arr){
+    var el = document.getElementById(id);
+    el.innerHTML = arr.map(function(s){ return '<option value="'+s+'">'+s+' …</option>'; }).join('');
+  }
+  fillSelect('m5-thema', themen);
+  document.getElementById('m5-thema').innerHTML = themen.map(function(t){ return '<option value="'+t+'">'+t+'</option>'; }).join('');
+  fillSelect('m5-b-starter', behauptungStarters);
+  fillSelect('m5-g-starter', begruendungStarters);
+  fillSelect('m5-e-starter', beispielStarters);
+
+  function updateM5Preview(){
+    var bStarter = document.getElementById('m5-b-starter').value;
+    var bText = document.getElementById('m5-b-text').value.trim();
+    var gStarter = document.getElementById('m5-g-starter').value;
+    var gText = document.getElementById('m5-g-text').value.trim();
+    var eStarter = document.getElementById('m5-e-starter').value;
+    var eText = document.getElementById('m5-e-text').value.trim();
+
+    var box = document.getElementById('m5-preview');
+    if(!bText && !gText && !eText){
+      box.innerHTML = '<span class="ph">Dein Argument erscheint hier, sobald du oben etwas einträgst …</span>';
+      return;
+    }
+    var parts = [];
+    if(bText) parts.push(bStarter + ' ' + bText + '.');
+    if(gText) parts.push(gStarter + ' ' + gText + '.');
+    if(eText) parts.push(eStarter + ' ' + eText + '.');
+    box.textContent = parts.join(' ');
+  }
+  ['m5-thema','m5-b-starter','m5-b-text','m5-g-starter','m5-g-text','m5-e-starter','m5-e-text'].forEach(function(id){
+    document.getElementById(id).addEventListener('input', updateM5Preview);
+    document.getElementById(id).addEventListener('change', updateM5Preview);
+  });
+  updateM5Preview();
+
+  document.getElementById('m5-copy').addEventListener('click', function(){
+    var txt = document.getElementById('m5-preview').textContent;
+    var fb = document.getElementById('m5-feedback');
+    fb.classList.add('show');
+    try{
+      navigator.clipboard.writeText(txt).then(function(){
+        fb.className = 'feedback-msg show ok';
+        fb.textContent = 'Kopiert! Du kannst deinen Text jetzt einfügen.';
+        markDone(5);
+      }).catch(function(){
+        fb.className = 'feedback-msg show warn';
+        fb.textContent = 'Kopieren hat nicht geklappt – markiere den Text im Kasten stattdessen von Hand.';
+      });
+    }catch(e){
+      fb.className = 'feedback-msg show warn';
+      fb.textContent = 'Kopieren wird hier nicht unterstützt – markiere den Text im Kasten von Hand.';
+    }
+  });
+  document.getElementById('m5-reset').addEventListener('click', function(){
+    ['m5-b-text','m5-g-text','m5-e-text'].forEach(function(id){ document.getElementById(id).value=''; });
+    updateM5Preview();
+    document.getElementById('m5-feedback').classList.remove('show');
+  });
+
+  /* ================= MODUL 6: Probeklassenarbeit "Schein und Sein" ================= */
+  // Alle Aussagen sind unmittelbar aus dem Sachtext "Schein und Sein" (E-/G-Kurs-Fassung)
+  // abgeleitet, nicht aus allgemeinem Wissen über Social Media.
+  var factData = [
+    { txt: 'Laut der im Text genannten JIM-Studie nutzen etwa 80 von 100 Jugendlichen zwischen 12 und 19 Jahren täglich soziale Netzwerke.', correct: true,
+      explain: 'Richtig – das steht so in der Einleitung des Textes.' },
+    { txt: 'Bearbeitete Bilder auf Instagram lassen Körper, Alltag und Erfolg laut Text perfekter wirken, als sie wirklich sind.', correct: true,
+      explain: 'Richtig – das ist der Kern des Abschnitts über Filter und Bildbearbeitung.' },
+    { txt: 'Der Algorithmus zeigt laut Text mit der Zeit weniger von dem, was man sich vorher angesehen hat, damit die Inhalte abwechslungsreicher werden.', correct: false,
+      explain: 'Falsch – der Text sagt das Gegenteil: Der Algorithmus zeigt immer mehr ähnliche Inhalte und verstärkt so einseitige Bilder.' },
+    { txt: 'In der Studie des Universitätsklinikums Ulm ging es Jugendlichen nach vier Wochen mit weniger Social Media nachweislich besser: weniger Stress, besserer Schlaf.', correct: true,
+      explain: 'Richtig – das ist das zentrale Ergebnis der im Text genannten Studie.' },
+    { txt: 'Die Studie des Universitätsklinikums Ulm kommt laut Text zu dem Schluss, dass Social Media für Jugendliche komplett verboten werden sollte.', correct: false,
+      explain: 'Falsch – untersucht wurde eine zeitliche Reduktion auf höchstens eine Stunde am Tag, kein Verbot.' },
+    { txt: 'FOMO steht im Text für die Angst, etwas zu verpassen bzw. sozial isoliert zu sein, wenn man nicht ständig online ist.', correct: true,
+      explain: 'Richtig – so wird FOMO im Text erklärt.' },
+    { txt: 'Der Text nennt als positive Seite, dass Jugendliche auf Instagram Gleichgesinnte finden können, die ihnen im echten Leben fehlen.', correct: true,
+      explain: 'Richtig – das steht im Abschnitt zur Gegenperspektive.' },
+    { txt: 'Laut Text hat Instagram ausschließlich negative Auswirkungen, positive Seiten werden nicht erwähnt.', correct: false,
+      explain: 'Falsch – der Text nennt ausdrücklich auch positive Seiten wie kreativen Ausdruck, Gemeinschaft, Gegenbewegungen und Informationszugang.' },
+    { txt: 'Bewegungen wie Body Positivity nutzen laut Text dieselben Mechanismen wie Instagram, um für Vielfalt und gegen Perfektionsdruck einzutreten.', correct: true,
+      explain: 'Richtig – das steht im Abschnitt zur Gegenperspektive.' },
+    { txt: 'Der Text kommt im Fazit zu dem eindeutigen Schluss, dass Instagram für alle Jugendlichen verboten werden sollte.', correct: false,
+      explain: 'Falsch – das Fazit ist abwägend: Wie stark der Einfluss ist, hängt von Medienkompetenz und Selbstwertgefühl ab, ein Verbot wird nicht gefordert.' }
+  ];
+
+  function buildM6Facts(){
+    var wrap = document.getElementById('m6-facts');
+    wrap.innerHTML = '';
+    var order = shuffle(factData.map(function(f,i){ return i; }));
+    order.forEach(function(idx, pos){
+      var f = factData[idx];
+      var div = document.createElement('div');
+      div.className = 'cloze-sent';
+      div.setAttribute('data-idx', idx);
+      var p = document.createElement('p');
+      p.innerHTML = '<span class="blank-tag mono">Aussage '+(pos+1)+'</span> '+f.txt;
+      div.appendChild(p);
+      var opts = document.createElement('div');
+      opts.className = 'opts';
+      ['Richtig','Falsch'].forEach(function(label){
+        var id = 'm6-'+idx+'-'+label;
+        var lab = document.createElement('label');
+        lab.className = 'opt';
+        lab.setAttribute('for', id);
+        lab.innerHTML = '<input type="radio" id="'+id+'" name="m6-q'+idx+'" value="'+label+'"> '+label;
+        opts.appendChild(lab);
+      });
+      div.appendChild(opts);
+      var expl = document.createElement('p');
+      expl.className = 'm6-explain';
+      expl.style.cssText = 'display:none; margin:10px 0 0; font-size:.88rem; color:var(--ink-soft);';
+      expl.textContent = f.explain;
+      div.appendChild(expl);
+      wrap.appendChild(div);
+    });
+  }
+
+  document.getElementById('m6-check').addEventListener('click', function(){
+    var allAnswered = true, allCorrect = true;
+    factData.forEach(function(f, idx){
+      var checked = document.querySelector('input[name="m6-q'+idx+'"]:checked');
+      var sentEl = document.querySelector('#m6-facts .cloze-sent[data-idx="'+idx+'"]');
+      var expl = sentEl.querySelector('.m6-explain');
+      Array.prototype.forEach.call(sentEl.querySelectorAll('.opt'), function(o){ o.classList.remove('is-correct','is-wrong'); });
+      sentEl.classList.remove('correct','wrong');
+      expl.style.display = 'none';
+      if(!checked){ allAnswered = false; return; }
+      var userSaysTrue = checked.value === 'Richtig';
+      var ok = userSaysTrue === f.correct;
+      var correctLabel = f.correct ? 'Richtig' : 'Falsch';
+      var correctInput = sentEl.querySelector('input[value="'+correctLabel+'"]');
+      if(!ok){
+        allCorrect = false;
+        sentEl.classList.add('wrong');
+        checked.closest('.opt').classList.add('is-wrong');
+        if(correctInput) correctInput.closest('.opt').classList.add('is-correct');
+      } else {
+        sentEl.classList.add('correct');
+        checked.closest('.opt').classList.add('is-correct');
+      }
+      expl.style.display = 'block';
+    });
+    var fb = document.getElementById('m6-feedback');
+    fb.classList.add('show');
+    if(!allAnswered){
+      fb.className = 'feedback-msg show warn';
+      fb.textContent = 'Bitte kreuze bei jeder Aussage Richtig oder Falsch an.';
+    } else if(allCorrect){
+      fb.className = 'feedback-msg show ok';
+      fb.textContent = 'Alles richtig! Du erinnerst dich genau an den Text – jetzt kannst du sicher sein, dass die Fakten in deiner Erörterung stimmen.';
+      markDone(6);
+    } else {
+      fb.className = 'feedback-msg show warn';
+      fb.textContent = 'Bei den rot markierten Aussagen lies dir die Erklärung darunter durch – prüfe, ob du diesen Punkt in deiner Probeklassenarbeit auch richtig wiedergegeben hast.';
+    }
+  });
+  document.getElementById('m6-reset').addEventListener('click', function(){
+    buildM6Facts();
+    document.getElementById('m6-feedback').classList.remove('show');
+  });
+  buildM6Facts();
+
+  var revcheckData = [
+    { group: 'Aufbau', items: [
+      'Meine Einleitung nennt das Thema (Instagram und Selbstbild) und weckt Interesse.',
+      'Ich habe meine Argumente gewichtet angeordnet – das schwächste zuerst, das stärkste zuletzt (E-Kurs: drei Argumente, G-Kurs: zwei Argumente).',
+      'Mein Schluss fasst zusammen und nennt meine eigene Meinung.'
+    ]},
+    { group: 'Inhalt & Fakten aus dem Text', items: [
+      'Ich habe mindestens einen konkreten Fakt aus „Schein und Sein“ sinngemäß in eigenen Worten wiedergegeben (z. B. JIM-Studie, Algorithmus oder Ulm-Studie).',
+      'Ich habe die Fakten korrekt wiedergegeben und nichts übertrieben oder falsch dargestellt (siehe Fakten-Check oben).'
+    ]},
+    { group: 'Argumentation', items: [
+      'Jedes Argument besteht bei mir aus Behauptung, Begründung und einem Beispiel aus dem Text.',
+      'Meine Argumente stehen wirklich in der Reihenfolge von weniger wichtig zu am wichtigsten.'
+    ]},
+    { group: 'Sprache & Formulierung', items: [
+      'Ich habe für jeden Abschnitt eine passende Formulierung genutzt (z. B. aus Modul 3 oder 4).',
+      'Ich habe nicht immer dieselbe Formulierung wiederholt.'
+    ]}
+  ];
+
+  function buildM6Checklist(){
+    var wrap = document.getElementById('m6-checklist');
+    wrap.innerHTML = '';
+    var total = 0;
+    revcheckData.forEach(function(group, gi){
+      var g = document.createElement('div');
+      g.className = 'revcheck-group';
+      var h = document.createElement('h4');
+      h.textContent = group.group;
+      g.appendChild(h);
+      group.items.forEach(function(item, ii){
+        total++;
+        var id = 'm6-chk-'+gi+'-'+ii;
+        var row = document.createElement('div');
+        row.className = 'revcheck-item';
+        row.innerHTML = '<input type="checkbox" id="'+id+'"><label for="'+id+'">'+item+'</label>';
+        g.appendChild(row);
+      });
+      wrap.appendChild(g);
+    });
+    document.getElementById('m6-total').textContent = String(total);
+    Array.prototype.forEach.call(wrap.querySelectorAll('input[type=checkbox]'), function(cb){
+      cb.addEventListener('change', updateM6Count);
+    });
+    updateM6Count();
+  }
+  function updateM6Count(){
+    var boxes = document.querySelectorAll('#m6-checklist input[type=checkbox]');
+    var n = 0;
+    Array.prototype.forEach.call(boxes, function(b){ if(b.checked) n++; });
+    document.getElementById('m6-count').textContent = String(n);
+  }
+  buildM6Checklist();
+
+  document.getElementById('m6-checklist-reset').addEventListener('click', function(){
+    Array.prototype.forEach.call(document.querySelectorAll('#m6-checklist input[type=checkbox]'), function(cb){ cb.checked = false; });
+    updateM6Count();
+  });
+
+  document.getElementById('m6-copy').addEventListener('click', function(){
+    var txt = document.getElementById('m6-notes').value.trim();
+    var fb = document.getElementById('m6-notes-feedback');
+    fb.classList.add('show');
+    if(!txt){
+      fb.className = 'feedback-msg show warn';
+      fb.textContent = 'Trag zuerst ein paar Notizen ein, dann kannst du sie kopieren.';
+      return;
+    }
+    try{
+      navigator.clipboard.writeText(txt).then(function(){
+        fb.className = 'feedback-msg show ok';
+        fb.textContent = 'Kopiert!';
+      }).catch(function(){
+        fb.className = 'feedback-msg show warn';
+        fb.textContent = 'Kopieren hat nicht geklappt – markiere den Text stattdessen von Hand.';
+      });
+    }catch(e){
+      fb.className = 'feedback-msg show warn';
+      fb.textContent = 'Kopieren wird hier nicht unterstützt – markiere den Text von Hand.';
+    }
+  });
+
+  document.getElementById('reset-all').addEventListener('click', function(){
+    try{ for(var i=1;i<=6;i++){ localStorage.removeItem('argw-done-'+i); } }catch(e){}
+    Array.prototype.forEach.call(document.querySelectorAll('.modnav a'), function(a){ a.classList.remove('done'); });
+    updateProgress();
+    buildM1(); buildM2(); buildM3();
+    clozeData.forEach(function(sent){ sent.options = shuffle(sent.options); });
+    buildM4();
+    document.getElementById('m4-feedback').classList.remove('show');
+    ['m5-b-text','m5-g-text','m5-e-text'].forEach(function(id){ document.getElementById(id).value=''; });
+    updateM5Preview();
+    buildM6Facts();
+    document.getElementById('m6-feedback').classList.remove('show');
+    Array.prototype.forEach.call(document.querySelectorAll('#m6-checklist input[type=checkbox]'), function(cb){ cb.checked = false; });
+    updateM6Count();
+    document.getElementById('m6-notes').value = '';
+    document.getElementById('m6-notes-feedback').classList.remove('show');
+    ['m1-feedback','m2-feedback','m3-feedback','m4-feedback','m5-feedback','m6-feedback'].forEach(function(id){
+      document.getElementById(id).classList.remove('show');
+    });
+  });
+
+  restoreDone();
+})();
+</script>
+
+</body>
+</html>
